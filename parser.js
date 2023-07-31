@@ -1,3 +1,4 @@
+const MeansOfDeath = require("./constants");
 module.exports = function processLog(logText) {
   const lines = logText.split("\n"); // Split the log text into individual lines
   const games = {}; // Object to store the data of the games
@@ -21,6 +22,7 @@ module.exports = function processLog(logText) {
         total_kills: 0,
         players: new Set(),
         kills: {},
+        kills_by_means: {},
       };
     }
     if (currentGame && line.includes("Kill:")) {
@@ -28,7 +30,7 @@ module.exports = function processLog(logText) {
       const parts = line.match(/Kill: \d+ \d+ \d+: (.+?) killed (.+?) by (.+)/); // Extract details of the kill from the line
       if (parts) {
         // If the kill details were extracted successfully
-        const [_, killer, killed] = parts; // Extract the killer, killed
+        const [_, killer, killed, meansOfDeathStr] = parts; // Extract the killer, killed, and means of death
         currentGame.total_kills += 1; // Increment the total kills
 
         if (killer !== "<world>" && killer !== killed) {
@@ -46,6 +48,18 @@ module.exports = function processLog(logText) {
           } else {
             currentGame.kills[killed] = currentGame.kills[killed] || 0; // Initialize the kills for the killed if not already done
           }
+        }
+
+        if (killer !== killed) {
+          // Determine the means of death
+          let meansOfDeath = MeansOfDeath[meansOfDeathStr.toUpperCase()];
+          if (meansOfDeath === undefined) {
+            meansOfDeath = MeansOfDeath.MOD_UNKNOWN; // Default to unknown if not recognized
+          }
+
+          // Increment the total kills for the specific means of death
+          currentGame.kills_by_means[meansOfDeath] =
+            (currentGame.kills_by_means[meansOfDeath] || 0) + 1;
         }
       }
     }
