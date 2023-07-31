@@ -89,4 +89,76 @@ describe("processLog function", () => {
       Player1: 0,
     });
   });
+
+  it("should process 4 simple game log correctly", () => {
+    // Sample log text for the test case
+    const logText = `
+      InitGame:
+      Kill: 0 1 2: Player1 killed Player2 by ${MeansOfDeath.MOD_SHOTGUN}
+      --------
+      InitGame:
+      Kill: 0 1 2: Player1 killed Player2 by ${MeansOfDeath.MOD_SHOTGUN}
+      exit
+      InitGame:
+      Kill: 0 1 2: Player1 killed Player2 by ${MeansOfDeath.MOD_SHOTGUN}
+      InitGame:
+      Kill: 0 1 2: Player1 killed Player2 by ${MeansOfDeath.MOD_SHOTGUN}
+
+    `;
+
+    // Run the function on the sample log
+    const result = processLog(logText);
+
+    // Expect the result to be as defined
+    expect(result).toEqual({
+      game_0: {
+        total_kills: 1,
+        players: ["Player1", "Player2"],
+        kills: {
+          Player1: 1,
+          Player2: 0,
+        },
+        kills_by_means: {
+          [MeansOfDeath.MOD_SHOTGUN]: 1,
+        },
+      },
+      game_1: {
+        total_kills: 1,
+        players: ["Player1", "Player2"],
+        kills: {
+          Player1: 1,
+          Player2: 0,
+        },
+        kills_by_means: {
+          [MeansOfDeath.MOD_SHOTGUN]: 1,
+        },
+      },
+      game_2: {
+        total_kills: 1,
+        players: ["Player1", "Player2"],
+        kills: {
+          Player1: 1,
+          Player2: 0,
+        },
+        kills_by_means: {
+          [MeansOfDeath.MOD_SHOTGUN]: 1,
+        },
+      },
+      game_3: {
+        total_kills: 1,
+        players: ["Player1", "Player2"],
+        kills: {
+          Player1: 1,
+          Player2: 0,
+        },
+        kills_by_means: {
+          [MeansOfDeath.MOD_SHOTGUN]: 1,
+        },
+      },
+      playerRanking: [
+        { player: "Player1", kills: 4 },
+        { player: "Player2", kills: 0 },
+      ],
+    });
+  });
 });
