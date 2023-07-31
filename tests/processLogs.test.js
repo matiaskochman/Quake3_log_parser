@@ -103,6 +103,7 @@ describe("processLog function", () => {
       Kill: 0 1 2: Player1 killed Player2 by ${MeansOfDeath.MOD_SHOTGUN}
       InitGame:
       Kill: 0 1 2: Player1 killed Player2 by ${MeansOfDeath.MOD_SHOTGUN}
+      Kill: 1022 5 22: <world> killed Player1 by ${MeansOfDeath.MOD_TRIGGER_HURT}
 
     `;
 
@@ -145,18 +146,19 @@ describe("processLog function", () => {
         },
       },
       game_3: {
-        total_kills: 1,
+        total_kills: 2,
         players: ["Player1", "Player2"],
         kills: {
-          Player1: 1,
+          Player1: 0, // <world> killed Player1
           Player2: 0,
         },
         kills_by_means: {
           [MeansOfDeath.MOD_SHOTGUN]: 1,
+          [MeansOfDeath.MOD_TRIGGER_HURT]: 1, // <world> killed Player1
         },
       },
       playerRanking: [
-        { player: "Player1", kills: 4 },
+        { player: "Player1", kills: 3 },
         { player: "Player2", kills: 0 },
       ],
     });
