@@ -1,0 +1,7 @@
+{
+  "name": "test1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Matias Kochman <matiaskochman@gmail.com>",
+  "license": "MIT"
+}
